@@ -3,6 +3,7 @@ package com.example.composekiwi
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.composechatkiwi.Destination
@@ -133,7 +134,6 @@ class ChatViewModel() : ViewModel() {
                 override fun onCancelled(error: DatabaseError) {
                     Log.d(TAG, "Failed to read value.", error.toException())
                 }
-            }
-            )
+            })
     }
 }

@@ -1,5 +1,6 @@
 package com.example.composekiwi
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,11 +18,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kiwichatcompose.Messages
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(userId: String, email: String) {
+fun ChatScreen(userId: String, email: String,vm: ChatViewModel = viewModel()) {
 
     var senderRoom: String? = null
     var receiverRoom: String? = null
@@ -31,6 +34,10 @@ fun ChatScreen(userId: String, email: String) {
     senderRoom = userId + senderUid
     receiverRoom = senderUid + userId
 
+    LaunchedEffect(Unit){
+        vm.getMessages(senderRoom)
+    }
+    
     Scaffold(
         topBar = {
             SmallTopAppBar(title = { Text(text = email) })
@@ -50,8 +57,6 @@ fun ChatMessages(
     userId: String? = null,
     senderRoom: String
 ) {
-
-    vm.getMessages(senderRoom = senderRoom)
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -70,6 +75,7 @@ fun ChatMessages(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun ChatBubble(message: Messages, userId: String) {
     Row(
         modifier = Modifier
