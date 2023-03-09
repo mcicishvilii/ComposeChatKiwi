@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "546479695882",
+    "firebase_url": "https://composechatkiwi-default-rtdb.firebaseio.com",
+    "project_id": "composechatkiwi",
+    "storage_bucket": "composechatkiwi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546479695882:android:9e7510efb15b25d242d7f3",
+        "android_client_info": {
+          "package_name": "com.example.composechatkiwi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546479695882-k5ht25ngcvp4sq72cjerk70sa5s3f1ng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrBn7ewsAUYc1QA-rjCO6AQf4gWQ3mIWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546479695882-k5ht25ngcvp4sq72cjerk70sa5s3f1ng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
