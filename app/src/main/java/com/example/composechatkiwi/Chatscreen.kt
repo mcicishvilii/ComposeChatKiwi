@@ -19,109 +19,109 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun ChatScreen(userId:String,email:String) {
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ChatScreen(userId: String, email: String) {
 
-        var senderRoom: String? = null
-        var receiverRoom: String? = null
+    var senderRoom: String? = null
+    var receiverRoom: String? = null
 
-        val senderUid = FirebaseAuth.getInstance().currentUser?.uid
+    val senderUid = FirebaseAuth.getInstance().currentUser?.uid
 
-        senderRoom = userId + senderUid
-        receiverRoom = senderUid + userId
+    senderRoom = userId + senderUid
+    receiverRoom = senderUid + userId
 
-        Scaffold(
-            topBar = {
-                MediumTopAppBar(title = { Text(text = email) })
-            },
-            bottomBar = {
-                SendMessageBar(senderRoom = senderRoom, receiverRoom = receiverRoom)
-            }
-        ) {
-            ChatMessages(userId = userId, senderRoom = senderRoom)
-            it
+    Scaffold(
+        topBar = {
+            SmallTopAppBar(title = { Text(text = email) })
+        },
+        bottomBar = {
+            SendMessageBar(senderRoom = senderRoom, receiverRoom = receiverRoom)
         }
+    ) {
+        ChatMessages(userId = userId, senderRoom = senderRoom)
+        it
     }
+}
 
-    @Composable
-    fun ChatMessages(
-        vm: ChatViewModel = viewModel(),
-        userId: String? = null,
-        senderRoom: String
-        ) {
+@Composable
+fun ChatMessages(
+    vm: ChatViewModel = viewModel(),
+    userId: String? = null,
+    senderRoom: String
+) {
 
-        vm.getMessages(senderRoom = senderRoom)
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().background(Color.DarkGray),
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            items(vm.messages.value) { message ->
-                ChatBubble(
-                    message = message,
-                    userId = userId!!
-                )
-            }
-        }
-    }
-
-
-
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun ChatBubble(message: Messages,userId: String) {
-        Row(
-            modifier = Modifier.fillMaxWidth().background(Color.Green),
-            horizontalArrangement =
-            if (message.id == userId) {
-                Arrangement.End
-            } else Arrangement.Start
-        ) {
-            Card(
-                modifier = Modifier.padding(8.dp),
-                shape = MaterialTheme.shapes.medium,
-            ) {
-                Text(
-                    text = message.text,
-                    modifier = Modifier.padding(8.dp)
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun SendMessageBar(
-        vm: ChatViewModel = viewModel(),
-        senderRoom:String,
-        receiverRoom:String
-        ) {
-
-        var textValue by remember { mutableStateOf(TextFieldValue("")) }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = textValue,
-                onValueChange = { textValue = it },
-                label = { Text(text = "Type your message...") },
-                modifier = Modifier.weight(1f)
+    vm.getMessages(senderRoom = senderRoom)
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.DarkGray),
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        items(vm.messages.value) { message ->
+            ChatBubble(
+                message = message,
+                userId = userId!!
             )
-
-            IconButton(
-                onClick = {
-                    vm.sendMessage(textValue.text,senderRoom,receiverRoom)
-                    textValue = TextFieldValue("")
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Send,
-                    contentDescription = "Send Message"
-                )
-            }
         }
     }
+}
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ChatBubble(message: Messages, userId: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray),
+        horizontalArrangement =
+        if (message.id == userId) {
+            Arrangement.Start
+        } else Arrangement.End
+    ) {
+        Card(
+            modifier = Modifier.padding(8.dp),
+            shape = MaterialTheme.shapes.medium,
+        ) {
+            Text(
+                text = message.text,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun SendMessageBar(
+    vm: ChatViewModel = viewModel(),
+    senderRoom: String,
+    receiverRoom: String
+) {
+
+    var textValue by remember { mutableStateOf(TextFieldValue("")) }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        OutlinedTextField(
+            value = textValue,
+            onValueChange = { textValue = it },
+            label = { Text(text = "Type your message...") },
+            modifier = Modifier.weight(1f)
+        )
+
+        IconButton(
+            onClick = {
+                vm.sendMessage(textValue.text, senderRoom, receiverRoom)
+                textValue = TextFieldValue("")
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Send,
+                contentDescription = "Send Message"
+            )
+        }
+    }
+}
 

@@ -119,9 +119,8 @@ class ChatViewModel() : ViewModel() {
     }
 
     fun getMessages(senderRoom: String) {
-        db.child("Chats").child(senderRoom!!).child("messages")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-
+        db.child("Chats").child(senderRoom).child("messages")
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     listOfMessages.clear()
                     for (ds in dataSnapshot.children) {
