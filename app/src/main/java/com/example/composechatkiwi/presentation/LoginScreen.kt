@@ -16,12 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.composechatkiwi.R
-import com.example.composekiwi.ChatViewModel
-
+import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
+import com.example.composechatkiwi.presentation.viewmodels.LoginRegisterViewModel
 
 
 @Composable
-fun LoginScreen(vm:ChatViewModel = viewModel(),navHostController: NavHostController) {
+fun LoginScreen(vm: LoginRegisterViewModel = viewModel(), navHostController: NavHostController) {
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
 

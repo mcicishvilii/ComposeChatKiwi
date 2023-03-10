@@ -1,4 +1,4 @@
-package com.example.kiwichatcompose
+package com.example.composechatkiwi.data
 
 import androidx.annotation.DrawableRes
 

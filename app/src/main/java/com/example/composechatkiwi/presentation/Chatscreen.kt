@@ -15,10 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kiwichatcompose.Messages
+import com.example.composechatkiwi.data.Messages
+import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.launch
 
 
 @SuppressLint("CoroutineCreationDuringComposition")

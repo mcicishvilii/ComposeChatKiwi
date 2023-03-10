@@ -19,12 +19,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.composechatkiwi.Destination
+import com.example.composechatkiwi.data.User
+import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import java.util.*
 

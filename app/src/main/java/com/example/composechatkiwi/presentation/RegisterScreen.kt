@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.composechatkiwi.Destination
+import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
+import com.example.composechatkiwi.presentation.viewmodels.LoginRegisterViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -21,7 +23,7 @@ import com.google.firebase.ktx.Firebase
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegistrationScreen(navHostController: NavHostController, vm: ChatViewModel = viewModel()) {
+fun RegistrationScreen(navHostController: NavHostController, vm: LoginRegisterViewModel = viewModel()) {
 
     DisposableEffect(Unit) {
         val auth = Firebase.auth
