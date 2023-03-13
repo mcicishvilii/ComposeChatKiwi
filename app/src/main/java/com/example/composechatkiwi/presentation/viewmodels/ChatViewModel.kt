@@ -78,7 +78,6 @@ class ChatViewModel() : ViewModel() {
                         }
                         val imutableList = listOfMessages.toList()
                         _messages.value = imutableList
-                        Log.d(TAG, "${listOfMessages.size} siis zoma")
                     }
 
                     override fun onCancelled(error: DatabaseError) {

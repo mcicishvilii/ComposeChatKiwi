@@ -78,11 +78,13 @@ fun ChatMessages(
     val listState = rememberLazyListState()
 
 
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Red),
         contentPadding = PaddingValues(8.dp),
+        state = listState
     ) {
 
 
@@ -91,22 +93,20 @@ fun ChatMessages(
 
         }
 
-        itemsIndexed(messagesFlow.value) {index, message ->
+        itemsIndexed(messagesFlow.value) { index, message ->
             ChatBubble(
                 message = message,
                 userId = userId!!
             )
-            LaunchedEffect(key1 = Unit){
+            LaunchedEffect(key1 = Unit) {
                 cs.launch {
-                    Log.d(TAG,index.toString() + "realuri indeqsi rac moyveba siis puqncias" )
-                    Log.d(TAG,messagesFlow.value.lastIndex.toString() + "messages flow bolo indeqsi")
-                    delay(1500)
-                    if (index == messagesFlow.value.lastIndex){
-                        listState.scrollToItem(index)
-                    }
-                    else{
-                        Log.d(TAG,"moxda else")
-                    }
+                    Log.d(TAG, index.toString() + "realuri indeqsi rac moyveba siis puqncias")
+                    Log.d(
+                        TAG,
+                        messagesFlow.value.lastIndex.toString() + "messages flow bolo indeqsi"
+                    )
+//                    delay(1500)
+                    listState.scrollToItem(messagesFlow.value.lastIndex)
                 }
             }
         }
