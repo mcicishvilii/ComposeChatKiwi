@@ -44,21 +44,15 @@ fun ChatScreen(userId: String, email: String, vm: ChatViewModel = viewModel()) {
     senderRoom = userId + senderUid
     receiverRoom = senderUid + userId
 
-//    val messages = vm.message.collectAsState()
-//    val meesagesValue = messages.value
-
-//    val scrollState = rememberLazyListState(initialFirstVisibleItemIndex = meesagesValue.size)
-//
-//    val imePaddingValues = PaddingValues()
-//    val imeBottomPadding = imePaddingValues.calculateBottomPadding().value.toInt()
-
-
     Scaffold(
         topBar = {
             SmallTopAppBar(title = { Text(text = email) })
         },
         bottomBar = {
-            SendMessageBar(senderRoom = senderRoom, receiverRoom = receiverRoom)
+            SendMessageBar(
+                senderRoom = senderRoom,
+                receiverRoom = receiverRoom
+            )
         }
     ) {
         ChatMessages(userId = userId, senderRoom = senderRoom)
@@ -77,20 +71,17 @@ fun ChatMessages(
     val cs: CoroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
 
-
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Red),
+            .padding(bottom = 57.dp),
+//            .background(Color.Red),
         contentPadding = PaddingValues(8.dp),
         state = listState
     ) {
 
-
         cs.launch {
             vm.getMessages(senderRoom)
-
         }
 
         itemsIndexed(messagesFlow.value) { index, message ->
@@ -100,12 +91,6 @@ fun ChatMessages(
             )
             LaunchedEffect(key1 = Unit) {
                 cs.launch {
-                    Log.d(TAG, index.toString() + "realuri indeqsi rac moyveba siis puqncias")
-                    Log.d(
-                        TAG,
-                        messagesFlow.value.lastIndex.toString() + "messages flow bolo indeqsi"
-                    )
-//                    delay(1500)
                     listState.scrollToItem(messagesFlow.value.lastIndex)
                 }
             }
@@ -116,19 +101,18 @@ fun ChatMessages(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
 fun ChatBubble(message: Messages, userId: String) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Green),
+            .fillMaxWidth(),
+//            .background(Color.Green),
         horizontalArrangement =
         if (message.id == userId) {
             Arrangement.Start
         } else Arrangement.End
     ) {
         Card(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(4.dp),
             shape = MaterialTheme.shapes.medium,
         ) {
             Text(
@@ -145,21 +129,17 @@ fun SendMessageBar(
     senderRoom: String,
     receiverRoom: String
 ) {
-
     var textValue by remember { mutableStateOf(TextFieldValue("")) }
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         OutlinedTextField(
             value = textValue,
             onValueChange = { textValue = it },
             label = { Text(text = "Type your message...") },
             modifier = Modifier.weight(1f)
         )
-
 
         IconButton(
             onClick = {
