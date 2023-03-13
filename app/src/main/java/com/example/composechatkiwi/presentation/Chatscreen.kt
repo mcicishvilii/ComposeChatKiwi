@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,11 +31,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+private lateinit var indexex:MutableState<Int>
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(userId: String, email: String, vm: ChatViewModel = viewModel()) {
+
+
+
+    indexex = rememberSaveable {mutableStateOf(0)}
+
 
     var senderRoom: String? = null
     var receiverRoom: String? = null
@@ -90,8 +97,9 @@ fun ChatMessages(
                 userId = userId!!
             )
             LaunchedEffect(key1 = Unit) {
-                Log.d(TAG,index.toString() + " - indeqsi")
-                if(index == 0 || index == messagesFlow.value.lastIndex){
+                indexex.value = index
+                Log.d(TAG, index.toString() + " - indeqsi")
+                if (index == 0 || index == messagesFlow.value.lastIndex) {
                     cs.launch {
                         listState.scrollToItem(messagesFlow.value.lastIndex)
                     }
@@ -133,6 +141,12 @@ fun SendMessageBar(
     receiverRoom: String
 ) {
     var textValue by remember { mutableStateOf(TextFieldValue("")) }
+
+    val messagesFlow = vm.message.collectAsState()
+    val cs: CoroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -148,7 +162,6 @@ fun SendMessageBar(
             onClick = {
                 vm.sendMessage(textValue.text, senderRoom, receiverRoom)
                 textValue = TextFieldValue("")
-
             }
         ) {
             Icon(
@@ -158,4 +171,7 @@ fun SendMessageBar(
         }
     }
 }
+
+@Composable
+private fun ScrollToTopButton(onClick: () -> Unit = {}) = Unit
 
