@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
@@ -90,11 +91,24 @@ fun ChatMessages(
 
         }
 
-        items(messagesFlow.value) { message ->
+        itemsIndexed(messagesFlow.value) {index, message ->
             ChatBubble(
                 message = message,
                 userId = userId!!
             )
+            LaunchedEffect(key1 = Unit){
+                cs.launch {
+                    Log.d(TAG,index.toString() + "realuri indeqsi rac moyveba siis puqncias" )
+                    Log.d(TAG,messagesFlow.value.lastIndex.toString() + "messages flow bolo indeqsi")
+                    delay(1500)
+                    if (index == messagesFlow.value.lastIndex){
+                        listState.scrollToItem(index)
+                    }
+                    else{
+                        Log.d(TAG,"moxda else")
+                    }
+                }
+            }
         }
     }
 }
