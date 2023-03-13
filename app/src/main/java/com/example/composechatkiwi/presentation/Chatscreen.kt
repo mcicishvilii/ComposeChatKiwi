@@ -90,8 +90,11 @@ fun ChatMessages(
                 userId = userId!!
             )
             LaunchedEffect(key1 = Unit) {
-                cs.launch {
-                    listState.scrollToItem(messagesFlow.value.lastIndex)
+                Log.d(TAG,index.toString() + " - indeqsi")
+                if(index == 0 || index == messagesFlow.value.lastIndex){
+                    cs.launch {
+                        listState.scrollToItem(messagesFlow.value.lastIndex)
+                    }
                 }
             }
         }
