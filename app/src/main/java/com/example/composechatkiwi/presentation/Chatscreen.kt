@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.*
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -40,6 +42,15 @@ fun ChatScreen(userId: String, email: String, vm: ChatViewModel = viewModel()) {
 
     senderRoom = userId + senderUid
     receiverRoom = senderUid + userId
+
+//    val messages = vm.message.collectAsState()
+//    val meesagesValue = messages.value
+
+//    val scrollState = rememberLazyListState(initialFirstVisibleItemIndex = meesagesValue.size)
+//
+//    val imePaddingValues = PaddingValues()
+//    val imeBottomPadding = imePaddingValues.calculateBottomPadding().value.toInt()
+
 
     Scaffold(
         topBar = {
@@ -61,8 +72,10 @@ fun ChatMessages(
     senderRoom: String,
 
     ) {
-    val messages = vm.message.collectAsState()
+    val messagesFlow = vm.message.collectAsState()
     val cs: CoroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
 
     LazyColumn(
         modifier = Modifier
@@ -74,15 +87,15 @@ fun ChatMessages(
 
         cs.launch {
             vm.getMessages(senderRoom)
+
         }
 
-        items(messages.value) { message ->
+        items(messagesFlow.value) { message ->
             ChatBubble(
                 message = message,
                 userId = userId!!
             )
         }
-
     }
 }
 
@@ -101,7 +114,7 @@ fun ChatBubble(message: Messages, userId: String) {
         } else Arrangement.End
     ) {
         Card(
-            modifier = Modifier.padding(1.dp),
+            modifier = Modifier.padding(20.dp),
             shape = MaterialTheme.shapes.medium,
         ) {
             Text(
@@ -133,10 +146,12 @@ fun SendMessageBar(
             modifier = Modifier.weight(1f)
         )
 
+
         IconButton(
             onClick = {
                 vm.sendMessage(textValue.text, senderRoom, receiverRoom)
                 textValue = TextFieldValue("")
+
             }
         ) {
             Icon(
