@@ -39,11 +39,14 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
     val db = Firebase.database.reference
     val auth = Firebase.auth
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color(0XFF020b1a))) {
 
         Text(
-            text = auth.currentUser?.email!!,
+            text = auth.currentUser?.email!!, // aq minda ro meilis nacvlad user name gamovachino
             style = TextStyle(
+                color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             ),
@@ -53,7 +56,6 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
         )
 
         LazyColumn(
-            modifier = Modifier.background(Color.Yellow),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(vm.users.value) { user ->
@@ -91,11 +93,11 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // generate random color for each user
-                    val color = Color(0xFFFFFFFF)
+                    val color = Color(kotlin.random.Random.nextLong(until = 0xFFFFFFFF))
 
                     Box(
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(50.dp)
                             .background(color = color, shape = CircleShape)
                     ) {}
 
@@ -104,13 +106,14 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                     Text(
                         text = user.userName,
                         style = TextStyle(
-                            fontSize = 18.sp,
+                            color = Color.White,
+                            fontSize = 22.sp,
                             fontWeight = FontWeight.Bold
                         ),
                         modifier = Modifier.weight(1f)
                     )
                 }
-                Divider(color = Color.Gray, thickness = 0.5.dp)
+                Divider(color = Color.Gray, thickness = 0.7.dp)
             }
         }
 
