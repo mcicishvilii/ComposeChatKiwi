@@ -12,9 +12,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composechatkiwi.ui.theme.ComposeChatKiwiTheme
 import com.example.composechatkiwi.presentation.ChatScreen
-import com.example.composekiwi.LoginScreen
-import com.example.composekiwi.RegistrationScreen
-import com.example.composekiwi.Users
+import com.example.composechatkiwi.presentation.LoginScreen
+import com.example.composechatkiwi.presentation.RegistrationScreen
+import com.example.composechatkiwi.presentation.Users
 
 class MainActivity : ComponentActivity() {
 

@@ -1,4 +1,4 @@
-package com.example.composekiwi
+package com.example.composechatkiwi.presentation
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -30,15 +30,27 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 
 const val TAG = "GESTAPO"
+
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
 fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = viewModel()) {
 
-    val db =  Firebase.database.reference
+    val db = Firebase.database.reference
     val auth = Firebase.auth
 
     Column(modifier = Modifier.fillMaxSize()) {
+
+        Text(
+            text = auth.currentUser?.email!!,
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            ),
+            modifier = Modifier
+                .padding(start = 26.dp, bottom = 15.dp, top = 15.dp)
+
+        )
 
         LazyColumn(
             modifier = Modifier.background(Color.Yellow),
@@ -50,26 +62,31 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                         .padding(vertical = 8.dp)
                         .fillMaxWidth()
                         .clickable {
-                            db.child("Users").addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    for (ds in dataSnapshot.children) {
-                                        val useri: User? = ds.getValue(User::class.java)
-                                        try{
-                                            if(useri?.email == user.email){
-                                                Log.d(TAG,"ifshi shevida ra")
-                                                navHostController?.navigate("${Destination.Chat.route}/${user.uid}/${user.email}")
+                            db
+                                .child("Users")
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                        for (ds in dataSnapshot.children) {
+                                            val useri: User? = ds.getValue(User::class.java)
+                                            try {
+                                                if (useri?.email == user.email) {
+                                                    navHostController?.navigate("${Destination.Chat.route}/${user.uid}/${user.email}")
+                                                }
+                                            } catch (e: Exception) {
+                                                Log.d(TAG, e.message.toString())
                                             }
                                         }
-                                        catch (e:Exception){
-                                            Log.d(TAG,e.message.toString())
-                                        }
                                     }
-                                }
-                                override fun onCancelled(error: DatabaseError) {
-                                    Log.d(TAG, "Error reading data from database", error.toException())
-                                }
-                            })
-                            Log.d(TAG,user.uid)
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.d(
+                                            TAG,
+                                            "Error reading data from database",
+                                            error.toException()
+                                        )
+                                    }
+                                })
+                            Log.d(TAG, user.uid)
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {

@@ -1,20 +1,21 @@
-package com.example.composekiwi
+package com.example.composechatkiwi.presentation
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.composechatkiwi.Destination
-import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
 import com.example.composechatkiwi.presentation.viewmodels.LoginRegisterViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -25,11 +26,15 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun RegistrationScreen(navHostController: NavHostController, vm: LoginRegisterViewModel = viewModel()) {
 
+    val ctx = LocalContext.current
     DisposableEffect(Unit) {
         val auth = Firebase.auth
         val user = auth.currentUser
         if (user != null) {
-            navHostController.navigate(Destination.Main.route)
+            navHostController.navigate(Destination.Main.route){
+                popUpTo(Destination.Register.route){ inclusive = true}
+            }
+
         }
         onDispose {
             Log.d("gaumarjos", "gaitisha registeri")
@@ -41,6 +46,7 @@ fun RegistrationScreen(navHostController: NavHostController, vm: LoginRegisterVi
     var passwordValue by remember { mutableStateOf(TextFieldValue()) }
 
     Scaffold(
+
         topBar = {
             SmallTopAppBar(
                 title = { Text("Users List") },
@@ -82,9 +88,15 @@ fun RegistrationScreen(navHostController: NavHostController, vm: LoginRegisterVi
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Button(
+
                     onClick = {
-                        vm.registerUser(usernameValue.text, emailValue.text, passwordValue.text)
-                        navHostController.navigate(Destination.Main.route)
+                        if(usernameValue.text.isNotEmpty() && emailValue.text.isNotEmpty() && passwordValue.text.isNotEmpty()){
+                            vm.registerUser(usernameValue.text, emailValue.text, passwordValue.text)
+                            navHostController.navigate(Destination.Main.route)
+                        }else{
+                            Toast.makeText(ctx,"please fill all the forms",Toast.LENGTH_SHORT).show()
+                        }
+
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -95,7 +107,9 @@ fun RegistrationScreen(navHostController: NavHostController, vm: LoginRegisterVi
 
                 Button(
                     onClick = {
-                        navHostController.navigate(Destination.Login.route)
+                        navHostController.navigate(Destination.Login.route){
+//                            popUpTo(Destination.Register.route){inclusive = true}
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

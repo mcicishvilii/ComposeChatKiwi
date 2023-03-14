@@ -1,4 +1,4 @@
-package com.example.composekiwi
+package com.example.composechatkiwi.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
