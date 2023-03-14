@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composechatkiwi.ui.theme.ComposeChatKiwiTheme
-import com.example.composekiwi.ChatScreen
+import com.example.composechatkiwi.presentation.ChatScreen
 import com.example.composekiwi.LoginScreen
 import com.example.composekiwi.RegistrationScreen
 import com.example.composekiwi.Users
