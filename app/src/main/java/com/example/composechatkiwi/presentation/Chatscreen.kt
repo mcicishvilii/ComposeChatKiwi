@@ -44,20 +44,46 @@ fun ChatScreen(userId: String, email: String, vm: ChatViewModel = viewModel()) {
     senderRoom = userId + senderUid
     receiverRoom = senderUid + userId
 
-    Scaffold(
-        topBar = {
-            SmallTopAppBar(title = { Text(text = email) })
-        },
-        bottomBar = {
-            SendMessageBar(
-                senderRoom = senderRoom,
-                receiverRoom = receiverRoom
-            )
-        }
-    ) {
+    val searchText by vm.searchText.collectAsState()
+    val messagesForSearch by vm.messagesForSearching.collectAsState()
+    val isSearching by vm.isSearching.collectAsState()
+
+
+    Column (Modifier.fillMaxSize().padding(10.dp)){
+        TextField(
+            value = searchText,
+            onValueChange = vm::onTextChange,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text(text = "search")}
+        )
+
+        SendMessageBar(
+            senderRoom = senderRoom,
+            receiverRoom = receiverRoom
+        )
+
         ChatMessages(userId = userId, senderRoom = senderRoom)
-        it
     }
+
+
+
+//        Scaffold(
+//            modifier = Modifier
+//                .fillMaxWidth(),
+//            topBar = {
+//                SmallTopAppBar(title = { Text(text = email) })
+//            },
+//            bottomBar = {
+//
+//            }
+//        ) {
+//
+//
+//            it
+//        }
+
+
+
 }
 
 @Composable
@@ -67,7 +93,7 @@ fun ChatMessages(
     senderRoom: String,
 
     ) {
-    val messagesFlow = vm.message.collectAsState()
+    val messagesFlow = vm.messagesForSearching.collectAsState()
     val cs: CoroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     val ctx = LocalContext.current

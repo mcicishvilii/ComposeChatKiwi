@@ -15,8 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
@@ -33,8 +32,36 @@ class ChatViewModel() : ViewModel() {
     private var _users = mutableStateOf<List<User>>(emptyList())
     val users: State<List<User>> = _users
 
-    private var _messages = MutableStateFlow<List<Messages>>(emptyList())
-    val message = _messages.asStateFlow()
+//    private var _messages = MutableStateFlow<List<Messages>>(emptyList())
+//    val message = _messages.asStateFlow()
+
+    private val _searchText = MutableStateFlow("")
+    val searchText = _searchText.asStateFlow()
+
+    private val _isSearching = MutableStateFlow(false)
+    val isSearching = _isSearching.asStateFlow()
+
+    private var _messagesForSearching = MutableStateFlow(listOf<Messages>())
+    val messagesForSearching = searchText
+        .combine(_messagesForSearching){text, messages ->
+            if(text.isBlank()){
+                messages
+            }else{
+                messages.filter{
+                    it.doesTextMatch(text)
+                }
+            }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            _messagesForSearching.value
+        )
+
+
+    fun onTextChange(text:String){
+        _searchText.value = text
+    }
 
 
     init {
@@ -73,7 +100,7 @@ class ChatViewModel() : ViewModel() {
                             listOfMessages.add(message!!)
                         }
                         val imutableList = listOfMessages.toList()
-                        _messages.value = imutableList
+                        _messagesForSearching.value = imutableList
                     }
 
                     override fun onCancelled(error: DatabaseError) {

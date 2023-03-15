@@ -1,6 +1,7 @@
 package com.example.composechatkiwi.presentation
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,8 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -105,17 +109,21 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                             .background(color = color, shape = CircleShape)
                     ) {}
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
 
-                    Text(
-                        text = user.userName,
-                        style = TextStyle(
-                            color = Color.White,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        modifier = Modifier.weight(1f)
-                    )
+//                    Column (Modifier.fillMaxSize()) {
+                        Text(
+                            text = user.userName,
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            modifier = Modifier.weight(1f)
+                        )
+//                        Text(text = "qindza")
+//                    }
+                    
                 }
                 Divider(color = Color.Gray, thickness = 0.7.dp)
             }
@@ -138,6 +146,55 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                 }
             }) {
             Text("log out")
+        }
+    }
+}
+
+
+
+
+@Preview
+@Composable
+fun ConversationsScreen() {
+    val conversations = mutableListOf<User>()
+    conversations.add(User("!","cicisha","mcicishvilii@gmail.com","paroli"))
+    LazyColumn {
+        items(conversations) { conversation ->
+            ConversationItem(conversation)
+        }
+    }
+}
+
+@Composable
+fun ConversationItem(conversation: User) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        val color = Color(kotlin.random.Random.nextLong(until = 0xFFFFFFFF))
+
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .background(color = color, shape = CircleShape)
+        ) {}
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .weight(1f)
+        ) {
+            Text(
+                text = conversation.userName,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = conversation.email,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
