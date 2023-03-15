@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import com.example.composechatkiwi.Destination
 import com.example.composechatkiwi.data.User
 import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
+import com.example.composechatkiwi.presentation.viewmodels.LoginRegisterViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,26 +35,29 @@ const val TAG = "GESTAPO"
 @OptIn(ExperimentalMaterial3Api::class)
 
 @Composable
-fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = viewModel()) {
+fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = viewModel(), vmLogin:LoginRegisterViewModel = viewModel()) {
 
     val db = Firebase.database.reference
     val auth = Firebase.auth
+    val user = auth.currentUser
 
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color(0XFF020b1a))) {
 
-        Text(
-            text = auth.currentUser?.email!!, // aq minda ro meilis nacvlad user name gamovachino
-            style = TextStyle(
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            ),
-            modifier = Modifier
-                .padding(start = 26.dp, bottom = 15.dp, top = 15.dp)
+        if (user != null) {
+            Text(
+                text = user.email!!, // aq minda ro meilis nacvlad user name gamovachino
+                style = TextStyle(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                modifier = Modifier
+                    .padding(start = 26.dp, bottom = 15.dp, top = 15.dp)
 
-        )
+            )
+        }
 
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
@@ -124,8 +128,14 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                 .fillMaxWidth()
                 .padding(10.dp),
             onClick = {
-                auth.signOut()
-                navHostController?.navigate(Destination.Register.route)
+                try {
+                    if(user != null){
+                        auth.signOut()
+                        navHostController?.navigate(Destination.Register.route)
+                    }
+                }catch (e:Exception){
+                    Log.d(TAG,e.message.toString())
+                }
             }) {
             Text("log out")
         }

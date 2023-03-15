@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.composechatkiwi.Destination
 import com.example.composechatkiwi.data.User
+import com.example.composechatkiwi.presentation.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
-class LoginRegisterViewModel() : ViewModel() {
+class LoginRegisterViewModel : ViewModel() {
 
     val db = Firebase.database.reference
     val auth = Firebase.auth
@@ -50,9 +51,14 @@ class LoginRegisterViewModel() : ViewModel() {
     private fun checkLoggedInState() {
         val user = auth.currentUser
         if (user == null) {
-            Log.d("mcici", "not logged in")
+            Log.d(TAG,"not logged in")
         } else {
-            Log.d("mcici", "logged in")
+            Log.d(TAG, "logged in")
         }
+    }
+
+    fun checkLoggedInStateBool():Boolean {
+        val user = auth.currentUser
+        return user == null
     }
 }

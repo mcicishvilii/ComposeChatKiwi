@@ -1,6 +1,10 @@
 package com.example.composechatkiwi.presentation
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,9 +16,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composechatkiwi.common.NotiReceiver
+import com.example.composechatkiwi.common.messageExtra
+import com.example.composechatkiwi.common.notificationID
+import com.example.composechatkiwi.common.titleExtra
 import com.example.composechatkiwi.data.Messages
 import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -61,6 +70,7 @@ fun ChatMessages(
     val messagesFlow = vm.message.collectAsState()
     val cs: CoroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val ctx = LocalContext.current
 
     LazyColumn(
         modifier = Modifier
@@ -85,6 +95,9 @@ fun ChatMessages(
                 if (index == 0 || index == messagesFlow.value.lastIndex) {
                     cs.launch {
                         listState.scrollToItem(messagesFlow.value.lastIndex)
+//                        if (message.id != userId){
+//                            scheduleNotification(ctx)
+//                        }
                     }
                 }
             }
@@ -92,14 +105,12 @@ fun ChatMessages(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatBubble(message: Messages, userId: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-//            .background(Color.Green),
         horizontalArrangement =
         if (message.id == userId) {
             Arrangement.Start
@@ -151,3 +162,32 @@ fun SendMessageBar(
 }
 
 
+
+private fun scheduleNotification(ctx:Context)
+{
+    val intent = Intent(ctx, NotiReceiver::class.java)
+
+    val title = "mesage"
+    val message = "recent message"
+    intent.putExtra(titleExtra, title)
+    intent.putExtra(messageExtra, message)
+
+    val pendingIntent = PendingIntent.getBroadcast(
+        ctx,
+        notificationID,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    val alarmManager = ctx?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val timeInAM = time
+    Log.d("mishocicka", "alarmmenejershi")
+    alarmManager.set(
+        AlarmManager.RTC_WAKEUP,
+        1000,
+        pendingIntent
+    )
+
+    Log.d("mishocicka","${alarmManager.nextAlarmClock}")
+
+}
