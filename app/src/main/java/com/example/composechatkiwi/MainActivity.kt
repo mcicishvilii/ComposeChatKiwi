@@ -14,7 +14,6 @@ import androidx.navigation.navArgument
 import com.example.composechatkiwi.presentation.*
 import com.example.composechatkiwi.ui.theme.ComposeChatKiwiTheme
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : ComponentActivity() {
 

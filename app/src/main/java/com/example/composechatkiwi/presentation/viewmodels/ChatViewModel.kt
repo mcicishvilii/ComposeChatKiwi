@@ -32,9 +32,6 @@ class ChatViewModel() : ViewModel() {
     private var _users = mutableStateOf<List<User>>(emptyList())
     val users: State<List<User>> = _users
 
-//    private var _messages = MutableStateFlow<List<Messages>>(emptyList())
-//    val message = _messages.asStateFlow()
-
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 

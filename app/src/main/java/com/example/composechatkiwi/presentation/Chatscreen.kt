@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,6 +17,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -49,41 +51,23 @@ fun ChatScreen(userId: String, email: String, vm: ChatViewModel = viewModel()) {
     val isSearching by vm.isSearching.collectAsState()
 
 
-    Column (Modifier.fillMaxSize().padding(10.dp)){
-        TextField(
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        OutlinedTextField(
             value = searchText,
             onValueChange = vm::onTextChange,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = "search")}
-        )
-
-        SendMessageBar(
-            senderRoom = senderRoom,
-            receiverRoom = receiverRoom
+            placeholder = { Text(text = "search") }
         )
 
         ChatMessages(userId = userId, senderRoom = senderRoom)
+
+        SendMessageBar(senderRoom = senderRoom, receiverRoom = receiverRoom)
     }
-
-
-
-//        Scaffold(
-//            modifier = Modifier
-//                .fillMaxWidth(),
-//            topBar = {
-//                SmallTopAppBar(title = { Text(text = email) })
-//            },
-//            bottomBar = {
-//
-//            }
-//        ) {
-//
-//
-//            it
-//        }
-
-
-
 }
 
 @Composable
@@ -100,10 +84,9 @@ fun ChatMessages(
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 57.dp),
-//            .background(Color.Red),
-        contentPadding = PaddingValues(8.dp),
+            .fillMaxHeight(0.89f)
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(10.dp),
         state = listState
     ) {
 
@@ -117,13 +100,9 @@ fun ChatMessages(
                 userId = userId!!
             )
             LaunchedEffect(key1 = Unit) {
-                Log.d(TAG, index.toString() + " - indeqsi")
                 if (index == 0 || index == messagesFlow.value.lastIndex) {
                     cs.launch {
                         listState.scrollToItem(messagesFlow.value.lastIndex)
-//                        if (message.id != userId){
-//                            scheduleNotification(ctx)
-//                        }
                     }
                 }
             }
@@ -163,7 +142,10 @@ fun SendMessageBar(
     var textValue by remember { mutableStateOf(TextFieldValue("")) }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+            .fillMaxHeight(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(
@@ -188,32 +170,3 @@ fun SendMessageBar(
 }
 
 
-
-private fun scheduleNotification(ctx:Context)
-{
-    val intent = Intent(ctx, NotiReceiver::class.java)
-
-    val title = "mesage"
-    val message = "recent message"
-    intent.putExtra(titleExtra, title)
-    intent.putExtra(messageExtra, message)
-
-    val pendingIntent = PendingIntent.getBroadcast(
-        ctx,
-        notificationID,
-        intent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
-
-    val alarmManager = ctx?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val timeInAM = time
-    Log.d("mishocicka", "alarmmenejershi")
-    alarmManager.set(
-        AlarmManager.RTC_WAKEUP,
-        1000,
-        pendingIntent
-    )
-
-    Log.d("mishocicka","${alarmManager.nextAlarmClock}")
-
-}
