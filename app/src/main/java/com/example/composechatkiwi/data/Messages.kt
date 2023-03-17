@@ -1,10 +1,12 @@
 package com.example.composechatkiwi.data
 
 import androidx.annotation.DrawableRes
+import java.sql.Timestamp
 
 data class Messages(
     val id:String = "",
-    val text:String = ""
+    val text:String = "",
+    val timeStamp:String = ""
 ){
     fun doesTextMatch(query:String):Boolean{
         val matchingStrings = listOf(

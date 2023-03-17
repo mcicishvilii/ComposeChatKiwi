@@ -17,6 +17,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 
 
 class ChatViewModel() : ViewModel() {
@@ -107,8 +108,8 @@ class ChatViewModel() : ViewModel() {
         }
     }
 
-    fun sendMessage(messageText: String, senderRoom: String, receiverRoom: String) {
-        val message = Messages(senderUid!!, messageText)
+    fun sendMessage(messageText: String, senderRoom: String, receiverRoom: String, timestamp: String) {
+        val message = Messages(senderUid!!, messageText, timestamp )
         if (messageText.isNotEmpty()) {
             db.child("Chats").child(senderRoom).child("messages").push()
                 .setValue(message).addOnSuccessListener {

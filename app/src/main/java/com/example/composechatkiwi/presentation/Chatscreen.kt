@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composechatkiwi.common.NotiReceiver
@@ -31,6 +32,8 @@ import com.example.composechatkiwi.presentation.viewmodels.ChatViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -116,11 +119,18 @@ fun ChatBubble(message: Messages, userId: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement =
         if (message.id == userId) {
             Arrangement.Start
         } else Arrangement.End
     ) {
+        if (message.id != userId){
+            Text(
+                text = message.timeStamp.drop(11),
+            )
+        }
+
         Card(
             modifier = Modifier.padding(4.dp),
             shape = MaterialTheme.shapes.medium,
@@ -128,6 +138,11 @@ fun ChatBubble(message: Messages, userId: String) {
             Text(
                 text = message.text,
                 modifier = Modifier.padding(8.dp)
+            )
+        }
+        if (message.id == userId){
+            Text(
+                text = message.timeStamp.drop(11),
             )
         }
     }
@@ -139,6 +154,13 @@ fun SendMessageBar(
     senderRoom: String,
     receiverRoom: String
 ) {
+
+
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+    val current = formatter.format(time)
+
+
     var textValue by remember { mutableStateOf(TextFieldValue("")) }
 
     Row(
@@ -157,7 +179,7 @@ fun SendMessageBar(
 
         IconButton(
             onClick = {
-                vm.sendMessage(textValue.text, senderRoom, receiverRoom)
+                vm.sendMessage(textValue.text, senderRoom, receiverRoom,current)
                 textValue = TextFieldValue("")
             }
         ) {
