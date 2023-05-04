@@ -80,6 +80,7 @@ fun Users(navHostController: NavHostController? = null, vm: ChatViewModel = view
                                             val useri: User? = ds.getValue(User::class.java)
                                             try {
                                                 if (useri?.email == user.email) {
+                                                    Log.d(TAG, "$user $useri")
                                                     navHostController?.navigate("${Destination.Chat.route}/${user.uid}/${user.email}")
                                                 }
                                             } catch (e: Exception) {
