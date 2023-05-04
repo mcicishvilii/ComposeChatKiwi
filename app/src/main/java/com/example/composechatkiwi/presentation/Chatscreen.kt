@@ -50,8 +50,8 @@ fun ChatScreen(userId: String, email: String, vm: ChatViewModel = viewModel()) {
     receiverRoom = senderUid + userId
 
     val searchText by vm.searchText.collectAsState()
-    val messagesForSearch by vm.messagesForSearching.collectAsState()
-    val isSearching by vm.isSearching.collectAsState()
+//    val messagesForSearch by vm.messagesForSearching.collectAsState()
+//    val isSearching by vm.isSearching.collectAsState()
 
 
     Column(

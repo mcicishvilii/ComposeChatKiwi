@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ComposeChatKiwi</string>
+    <string name="msg_token_fmt">code</string>
 </resources>
