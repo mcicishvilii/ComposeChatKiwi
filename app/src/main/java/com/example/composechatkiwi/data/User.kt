@@ -1,4 +1,4 @@
-package com.example.composekiwi
+package com.example.composechatkiwi.data
 
 
 data class User(
